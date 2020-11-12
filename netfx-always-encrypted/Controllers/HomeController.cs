@@ -9,12 +9,12 @@ namespace netfx_always_encrypted.Controllers
 {
     public class HomeController : Controller
     {
-        private TodoContext todoContext = new TodoContext();
+        //private TodoContext todoContext = new TodoContext();
         public ActionResult Index()
         {
-            var todos = todoContext.TodoItems.ToList();
+            //var todos = todoContext.TodoItems.ToList();
 
-            return View(todos);
+            return RedirectToAction("Index", "Todo");
         }
 
         public ActionResult About()
