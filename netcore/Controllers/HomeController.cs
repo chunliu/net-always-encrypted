@@ -20,7 +20,7 @@ namespace netcore.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index", "Todo");
         }
 
         public IActionResult Privacy()
