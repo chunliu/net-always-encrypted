@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Clients.ActiveDirectory;
+﻿using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Microsoft.SqlServer.Management.AlwaysEncrypted.AzureKeyVaultProvider;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,6 @@ namespace netfx
 {
     public class AlwaysEncryptedConfig
     {
-        private static string clientId = ConfigurationManager.AppSettings["spClientId"];
-        private static string clientSecret = ConfigurationManager.AppSettings["spClientSecret"];
-
         public static void InitializeAzureKeyVaultProvider()
         {
             var azKeyVaultProvider = new SqlColumnEncryptionAzureKeyVaultProvider(GetToken);
@@ -25,9 +23,23 @@ namespace netfx
 
         private static async Task<string> GetToken(string authority, string resource, string scope)
         {
-            var authContext = new AuthenticationContext(authority);
-            ClientCredential clientCred = new ClientCredential(clientId, clientSecret);
-            AuthenticationResult result = await authContext.AcquireTokenAsync(resource, clientCred);
+            string clientId = ConfigurationManager.AppSettings["spClientId"];
+            string clientSecret = ConfigurationManager.AppSettings["spClientSecret"];
+
+            // Option 1: Use Microsoft.IdentityModel.Clients.ActiveDirectory
+            //var authContext = new AuthenticationContext(authority);
+            //ClientCredential clientCred = new ClientCredential(clientId, clientSecret);
+            //AuthenticationResult result = await authContext.AcquireTokenAsync(resource, clientCred);
+
+            // Option 2 (recommended): Use Microsoft.Identity.Client
+            var clientApp = ConfidentialClientApplicationBuilder
+                .Create(clientId)
+                .WithClientSecret(clientSecret)
+                .WithAuthority(authority)
+                .Build();
+            var scopes = new[] { resource + "/.default" };
+            var result = await clientApp.AcquireTokenForClient(scopes).ExecuteAsync();
+
             if (result == null)
                 throw new Exception("GetToken failed");
 
