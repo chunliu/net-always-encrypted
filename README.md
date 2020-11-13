@@ -6,4 +6,4 @@ The code in the following folders:
 - netcore - .NET 5 + EF Core + Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider
 - netfx - .NET Framework 4.8 + EF6 + Microsoft.SqlServer.Management.AlwaysEncrypted.AzureKeyVaultProvider
 
-Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider cannot be used for EF6 since Microsoft.Data.SqlClient is not compatible with EF6. dotnet/SqlClient#725
+Microsoft.Data.SqlClient.AlwaysEncrypted.AzureKeyVaultProvider cannot be used for EF6 since Microsoft.Data.SqlClient is not compatible with EF6. https://github.com/dotnet/SqlClient/issues/725
