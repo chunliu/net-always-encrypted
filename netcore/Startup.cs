@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Identity.Client;
 using netcore.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -53,6 +54,10 @@ namespace netcore
                 .Build();
             var scopes = new[] { resource + "/.default" };
             var authResult = await clientApp.AcquireTokenForClient(scopes).ExecuteAsync();
+            if (authResult == null)
+            {
+                throw new Exception("Failed to acquire the access token.");
+            }
 
             return authResult.AccessToken;
         }
